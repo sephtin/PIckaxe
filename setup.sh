@@ -20,7 +20,6 @@ rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
 
 #boilerplate debian system upgrade
 export DEBIAN_FRONTEND="noninteractive"
-sed -i '/cdrom:/d' /etc/apt/sources.list
 apt-get update -y
 apt-get dist-upgrade -y
 apt-get autoremove
@@ -231,7 +230,7 @@ cd iptables_torify
 # Gave group r/w, and changed group to www-data.
 mkdir -p /etc/PIckaxe
 chgrp www-data /etc/PIckaxe
-chmod 775 www-data /etc/PIckaxe
+chmod 775 /etc/PIckaxe
 touch "/etc/PIckaxe/pickaxe_show_nl_status"
 #chmod 664 "/etc/PIckaxe/pickaxe_show_nl_status"
 chgrp www-data "/etc/PIckaxe/pickaxe_show_nl_status"
