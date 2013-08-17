@@ -5,7 +5,7 @@
 
 this_script="$(readlink -f "$0")"
 this_dir="${this_script%/${0##*/}}"
-
+settings_dir="/etc/PIckaxe"
 
 required_packages="vim git ssh sudo coreutils libssl-dev openssl build-essential uthash-dev libjansson-dev autoconf pkg-config libtool libcurl4-openssl-dev libncurses5-dev nginx php5-cli php5-fpm tor"
 
@@ -210,10 +210,10 @@ cp -r "$this_dir/pickaxe_webif/"* /var/www
 /etc/init.d/nginx restart
 
 
-
-
 # allow www-data unlimited sudo without password
-echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: ALL' >>/etc/sudoers
+#echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: ALL' >>/etc/sudoers
+# Restricted sudo to only called binaries
+echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: /etc/init.d/bfgminer *, /etc/init.d/tor *, /etc/init.d/torify *, /usr/sbin/update-rc.d *' >>/etc/sudoers
 
 
 # tor, disable by default
@@ -228,6 +228,10 @@ cd iptables_torify
 /usr/sbin/update-rc.d torify disable 
 
 # by default display settings without login
-touch "/etc/pickaxe_show_nl_status"
-chmod 644 "/etc/pickaxe_show_nl_status"
-
+# Gave group r/w, and changed group to www-data.
+mkdir -p /etc/PIckaxe
+chgrp www-data /etc/PIckaxe
+chmod 775 www-data /etc/PIckaxe
+touch "/etc/PIckaxe/pickaxe_show_nl_status"
+#chmod 664 "/etc/PIckaxe/pickaxe_show_nl_status"
+chgrp www-data "/etc/PIckaxe/pickaxe_show_nl_status"

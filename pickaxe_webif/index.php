@@ -69,7 +69,7 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 
 
 		<?php
-			if($GLOBALS['hashed_pass'] != null && (validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout'] ) || file_exists("/etc/pickaxe_show_nl_status") ) )
+			if($GLOBALS['hashed_pass'] != null && (validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout'] ) || file_exists("/etc/PIckaxe/pickaxe_show_nl_status") ) )
 			{
 		?>
 
@@ -236,7 +236,7 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 					<span class="input_span">
 						<div class="check_3d">
 							<?php
-								$nl_status_checked = file_exists("/etc/pickaxe_show_nl_status") ? "checked=\"yes\"" : ""; 
+								$nl_status_checked = file_exists("/etc/PIckaxe/pickaxe_show_nl_status") ? "checked=\"yes\"" : ""; 
 								echo "\t\t\t\t\t\t\t<input type=\"checkbox\"  id=\"nl_status\" $nl_status_checked name=\"nl_status\" />\n";
 							?>
 							<label for="nl_status"></label> 
@@ -249,7 +249,7 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 					<span class="input_span">
 						<div class="check_3d">
 							<?php
-								$use_tor_checked = file_exists("/etc/pickaxe_use_tor") ? "checked=\"yes\"" : ""; 
+								$use_tor_checked = file_exists("/etc/PIckaxe/pickaxe_use_tor") ? "checked=\"yes\"" : ""; 
 								echo "\t\t\t\t\t\t\t<input type=\"checkbox\"  id=\"use_tor\" $use_tor_checked name=\"use_tor\" />\n";
 							?>
 							<label for="use_tor"></label> 
