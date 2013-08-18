@@ -35,6 +35,7 @@ done
 #set hostname to PIckaxe
 echo "PIckaxe" > /etc/hostname
 echo "PIckaxe" > /proc/sys/kernel/hostname   2>/dev/null
+sed -i "s/\(127.0.1.1\s\)raspberrypi/\1PIckaxe/g" /etc/hosts
 
 
 #install bfgminer to /usr/local/bin/bfgminer
