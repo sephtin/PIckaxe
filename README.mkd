@@ -26,33 +26,30 @@ There are two ways to install PIckaxe. Option one is to write the PIckaxe image 
 
 ##### Installing The Disk Image
 
-I have uploaded the PIckaxe install image to my google drive [here](https://docs.google.com/file/d/0B_Hgpz1D7fJ1RnpVWXliWHplLXc). The first step is to download it and extract this file. It is tarred and compressed with bzip2. The compressed download is 266MB. Extracted it is 1.8GB.
+I've removed this section.  If you'd like to install from image, please see the original author's repo for more info.  
 
-The MD5 checksum of the extracted image should be 901a09fb0166f9ba8bcc3d1efc5900a3
-
-Install this image to an SD card just as you would any other image for the Raspberry PI. An sdcard installation guide can be found [here](http://elinux.org/RPi_Easy_SD_Card_Setup). On linux you would use the dd tool with a command something like:
-
-		dd bs=1M if=rpi-pickaxe-v0.01.img of=/dev/[YOUR_SDCARD_DRIVE]
-
-
-Once the disk image has been copied to your sdcard put it in your raspberry pi and boot. The default SSH username and password have not been changed from a default raspbian install. You can login via SSH as "pi" and password "raspberry".  The hostname on your network has been changed from "raspberrypi" to "pickaxe". A shell script will run the first time you boot that automatically generates new and unique SSH keys for your host. This ensures your SSH sessions will be secure and you do not need to do this manually.
-
-After this you should be able to access the PIckaxe web interface provided you have connected your raspberry pi to your network.
-
+For my changes please install Raspbian, pull the source, and run setup as described below.  There are all kinds of guides describing how to install Raspbian.  If you received an SDCard with your Pi, you probably already have it installed!
 
 ##### Installing Using The setup.sh Script
 
-Copy the entire contents of the pickaxe repository to your raspberry pi which has raspbian wheezy installed.  SSH into your raspberry pi as a user that has sudo priviledges.  By default the pi user has these priviledges. Then run:
+SSH into your raspberry pi as a user that has sudo priviledges (By default the pi user has these priviledges). 
+Copy the entire contents of the pickaxe repository to your raspberry pi which has raspbian wheezy installed.  
 
+		git clone https://github.com/sephtin/PIckaxe
+
+Change into the PIckaxe directory and run setup:
+
+		cd PIckaxe
 		sudo ./setup.sh
 
-This script will take half an hour to an hour to run depending on the speed of your network connection. Once the script is finished you should be able to connect to the PIckaxe web interface. Note that this script automatically regenerates your raspberry pi SSH keys as this is a step that should always be done after a fresh installation of Raspbian to ensure your security. The hostname is also changed to pickaxe.
+This script will take half an hour to an hour to run depending on the speed of your network connection. Once the script is finished you should be able to connect to the PIckaxe web interface. Note that this script automatically regenerates your raspberry pi SSH keys as this is a step that should always be done after a fresh installation of Raspbian to ensure your security. The hostname is also changed to PIckaxe.
 
 
 ### Screenshots And Usage Instructions
 
 Configuration of the web interface should be intuitive and straightforward. Instead of describing how to configure the web interface here, please see the series of configuration screenshots I have [uploaded to Imgur](http://imgur.com/a/B9FyJ). These show the progression of configuring and using PIckaxe. These same screenshots are included in the screenshots directory of this repository.
 
+NOTE:  Screenshots are of the original author's version, and do not contain my updates.  -sephtin
 
 ### DISCLAIMER
 
@@ -61,8 +58,12 @@ I cannot guarantee that this software is bug free or that you should be trusting
 
 ### Donations Are Welcome
 
-Note that no default pools are configured. I strongly dislike the idea of having default workers configured to mine for donations to me as is the case in MinePeon. That seems rather dishonest and sketchy. 
+To donate to the original author (stronginthearm) send donations to: 1M9GY1qNKf6Fo1HRUyFxnyH5MuztMbPBg3
 
-There is a donation address at the bottom of the page if you do want to donate. Despite my dislike of the default donation configuration found in MinePeon donations are very welcome. I just feel that tricking people into giving is rather unethical. Send donations to: 1M9GY1qNKf6Fo1HRUyFxnyH5MuztMbPBg3
+Please note that the original author was stronginthearm.  Please see VERSIONS.md for changes I've made on this repo from his. (I've asked him to merge some of my changes... but don't know how to contact the original author! :(  
+If you are the original author, or know him, please PM me on bitcointalk.
 
+If my work has helped you, donations are appreciated!  17ugcvKLG1rR7qb1yh6yzEsSyFEFPwvWcF
 
+Thank you!
+-sephtin
