@@ -7,7 +7,7 @@ this_script="$(readlink -f "$0")"
 this_dir="${this_script%/${0##*/}}"
 
 
-required_packages="vim git ssh sudo coreutils libssl-dev openssl build-essential uthash-dev libjansson-dev autoconf pkg-config libtool libcurl4-openssl-dev libncurses5-dev nginx php5-cli php5-fpm tor"
+required_packages="vim git ssh sudo coreutils libssl-dev openssl build-essential uthash-dev libjansson-dev autoconf pkg-config libtool libcurl4-openssl-dev libncurses5-dev nginx php5-cli php5-fpm tor libusb-dev"
 
 # prefer bfgminer from Luke Jr. to cgminer, better optimized for BFL devices, 
 # checkout code directly from github at url below
