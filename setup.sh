@@ -233,5 +233,5 @@ mkdir -p /etc/PIckaxe
 chgrp www-data /etc/PIckaxe
 chmod 775 /etc/PIckaxe
 touch "/etc/PIckaxe/pickaxe_show_nl_status"
-#chmod 664 "/etc/PIckaxe/pickaxe_show_nl_status"
+chmod 664 "/etc/PIckaxe/pickaxe_show_nl_status"
 chgrp www-data "/etc/PIckaxe/pickaxe_show_nl_status"
