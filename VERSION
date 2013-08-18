@@ -1,0 +1,10 @@
+Version 0.1.1 - 20130818 (sephtin)
+--Hosts in setup.sh fixes
+--Added TotalShares, Rejected (and %), HardwareErrors (and %)
+
+Version -- Original Commit (stronginthearm)
+
+PIckaxe - By stronginthearm
+
+Author's repo:  https://github.com/stronginthearm/PIckaxe
+Sephtin's repo:  https://github.com/sephtin/PIckaxe
