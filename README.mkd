@@ -48,7 +48,8 @@ This script will take half an hour to an hour to run depending on the speed of y
 ### Screenshots And Usage Instructions
 
 Configuration of the web interface should be intuitive and straightforward. Instead of describing how to configure the web interface here, please see the series of configuration screenshots I have [uploaded to Imgur](http://imgur.com/a/B9FyJ). These show the progression of configuring and using PIckaxe. These same screenshots are included in the screenshots directory of this repository.
-Screenshots are of the original author's version, and do not contain my updates.  -sephtin
+
+NOTE:  Screenshots are of the original author's version, and do not contain my updates.  -sephtin
 
 ### DISCLAIMER
 
