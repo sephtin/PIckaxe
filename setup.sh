@@ -20,7 +20,6 @@ rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
 
 #boilerplate debian system upgrade
 export DEBIAN_FRONTEND="noninteractive"
-sed -i '/cdrom:/d' /etc/apt/sources.list
 apt-get update -y
 apt-get dist-upgrade -y
 apt-get autoremove
@@ -34,9 +33,9 @@ done
 
 
 #set hostname to PIckaxe
-cat 'PIckaxe' >  /etc/hostname
+echo "PIckaxe" > /etc/hostname
 echo "PIckaxe" > /proc/sys/kernel/hostname   2>/dev/null
-
+sudo sed -i "s/\(127.0.1.1\s\)raspberrypi/\1PIckaxe/" /etc/hosts
 
 #install bfgminer to /usr/local/bin/bfgminer
 mkdir -p  "$bfgminer_build_dir"
