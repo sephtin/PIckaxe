@@ -60,10 +60,10 @@ I cannot guarantee that this software is bug free or that you should be trusting
 
 To donate to the original author (stronginthearm) send donations to: 1M9GY1qNKf6Fo1HRUyFxnyH5MuztMbPBg3
 
-Please note that the original author was stronginthearm.  Please see VERSIONS.md for changes I've made on this repo from his. (I've asked him to merge some of my changes... but don't know how to contact the original author! :(  
+Please note that the original author is stronginthearm.  Please see VERSIONS for changes I've made on this repo from his. (I've asked him to merge some of my changes... but don't know how to contact the original author! :(  
 If you are the original author, or know him, please PM me on bitcointalk.
 
 If my work has helped you, donations are appreciated!  17ugcvKLG1rR7qb1yh6yzEsSyFEFPwvWcF
 
-Thank you!
+Thank you!  
 -sephtin
