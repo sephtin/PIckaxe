@@ -40,17 +40,17 @@ else
 	fclose($fh);
 
 
-	$nl_status_file="/etc/pickaxe_show_nl_status";
-	$use_tor_file="/etc/pickaxe_use_tor";
+	$nl_status_file="/etc/PIckaxe/pickaxe_show_nl_status";
+	$use_tor_file="/etc/PIckaxe/pickaxe_use_tor";
 	if(isset($_POST['nl_status']))
 	{
-		system("sudo touch '$nl_status_file'");
-		system("sudo chmod 644 '$nl_status_file'");
+		umask(0002);
+		touch("$nl_status_file");
 
 	}
 	else
 	{
-		system("sudo rm '$nl_status_file'");
+		unlink("$nl_status_file");
 	}
 
 
@@ -59,8 +59,8 @@ else
 		if(!file_exists($use_tor_file))
 		{
 			$need_bfgminer_restart = true;
-			system("sudo touch '$use_tor_file'");
-			system("sudo chmod 644 '$use_tor_file'");
+			umask(0002);
+			touch("$use_tor_file");
 			system("sudo update-rc.d tor enable");
 			system("sudo /etc/init.d/tor restart ; sleep 10 ;");
 			system("sudo /usr/sbin/update-rc.d torify enable");
@@ -72,7 +72,7 @@ else
 		if(file_exists($use_tor_file))
 		{
 			$need_bfgminer_restart = true;
-			system("sudo rm '$use_tor_file'");
+			unlink("$use_tor_file");
 			system("sudo /usr/sbin/update-rc.d tor disable");
 			system("sudo /etc/init.d/tor stop ");
 			system("sudo /usr/sbin/update-rc.d torify disable");

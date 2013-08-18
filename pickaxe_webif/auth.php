@@ -12,7 +12,7 @@ $GLOBALS['session_timeout'] = 60*15;
 
 function validPasswordCookie($cookie_vars_from_post=false, $hashed_pass=null, $session_timeout=null)
 {
-	$hashed_pass_file = "/etc/pickaxe_hashed_pass";
+	$hashed_pass_file = "/etc/PIckaxe/pickaxe_hashed_pass";
 
 	if($session_timeout == null)
 	{
@@ -78,22 +78,20 @@ function setPasswordCookie($hashed_pass=null)
 
 function setPassword($password)
 {
-	$hashed_pass_file = "/etc/pickaxe_hashed_pass";
+	$hashed_pass_file = "/etc/PIckaxe/pickaxe_hashed_pass";
 	$hashed_pass = crypt($password);
-		
-	system("sudo touch '$hashed_pass_file'");
-	system("sudo chmod 777 '$hashed_pass_file'");
+	umask(0002);
+	touch("$hashed_pass_file");
 	$fh = fopen($hashed_pass_file, "w");
 	fwrite($fh, $hashed_pass);
 	fclose($fh);
-	system("sudo chmod 644 '$hashed_pass_file'");
 
 	return $hashed_pass;
 }
 
 function getHashedPass($loaded_hashed_pass=null)
 {
-	$hashed_pass_file = "/etc/pickaxe_hashed_pass";
+	$hashed_pass_file = "/etc/PIckaxe/pickaxe_hashed_pass";
 	if($loaded_hashed_pass == null)
 	{
 		if(file_exists($hashed_pass_file))

@@ -4,7 +4,7 @@ require_once  "auth.php" ;
 
 $password_1 = $_POST['web_pass_1'];
 $password_2 = $_POST['web_pass_2'];
-$hashed_pass_file = "/etc/pickaxe_hashed_pass";
+$hashed_pass_file = "/etc/PIckaxe/pickaxe_hashed_pass";
 
 if($password_1 == $password_2 && $password_1 != "")
 {
