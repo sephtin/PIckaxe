@@ -6,14 +6,12 @@
 # 
 # Session timeout is by default 15 minutes (variable is in seconds)
 # 
-
 $GLOBALS['session_timeout'] = 60*15;
 
+require_once  "config.php" ;
 
 function validPasswordCookie($cookie_vars_from_post=false, $hashed_pass=null, $session_timeout=null)
 {
-	$hashed_pass_file = "/etc/PIckaxe/pickaxe_hashed_pass";
-
 	if($session_timeout == null)
 	{
 		$sessionh_timout = $GLOBALS['session_timeout'];
@@ -32,7 +30,7 @@ function validPasswordCookie($cookie_vars_from_post=false, $hashed_pass=null, $s
 		#expired session 
 		return false;
 	}
-	
+
 	$retval = false;
 	$hashed_pass = getHashedPass($hashed_pass);
 	if($hashed_pass != null)
@@ -49,7 +47,6 @@ function loginValid($login_password, $hashed_pass=null)
 {
 	$valid = false;
 	$hashed_pass = getHashedPass($hashed_pass);
-	
 	if($hashed_pass != null)
 	{
 		if( (crypt($login_password, $hashed_pass) == $hashed_pass) )
@@ -78,31 +75,22 @@ function setPasswordCookie($hashed_pass=null)
 
 function setPassword($password)
 {
-	$hashed_pass_file = "/etc/PIckaxe/pickaxe_hashed_pass";
 	$hashed_pass = crypt($password);
-	umask(0002);
-	touch("$hashed_pass_file");
-	$fh = fopen($hashed_pass_file, "w");
-	fwrite($fh, $hashed_pass);
-	fclose($fh);
-
+        write_ini_file('Password_hash', $hashed_pass);
 	return $hashed_pass;
 }
 
 function getHashedPass($loaded_hashed_pass=null)
 {
-	$hashed_pass_file = "/etc/PIckaxe/pickaxe_hashed_pass";
 	if($loaded_hashed_pass == null)
 	{
-		if(file_exists($hashed_pass_file))
+		$password_hash = read_ini_file('Password_hash');
+		if ($password_hash != null)
 		{
-			$fh = fopen("$hashed_pass_file", 'r');
-			$loaded_hashed_pass = fread($fh, filesize($hashed_pass_file));
-			fclose($fh);
+			$loaded_hashed_pass = $password_hash;
 		}
 	}
 	return $loaded_hashed_pass;
 }
-
 
 ?>

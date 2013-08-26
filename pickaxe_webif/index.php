@@ -2,8 +2,7 @@
 
 require_once  "auth.php" ;
 
-$GLOBALS['hashed_pass'] = getHashedPass($hashed_pass);
-
+$GLOBALS['hashed_pass'] = getHashedPass();
 
 $message_vars = [ 'login_message', 'login_message_class', 'control_message', 'control_message_class' ];
 foreach ($message_vars as $var_name)
@@ -11,7 +10,6 @@ foreach ($message_vars as $var_name)
 	if(isset($_COOKIE[$var_name]))
 	{
 		$GLOBALS[$var_name] = $_COOKIE[$var_name];
-		
 		unset($_COOKIE[$var_name]);
 		setcookie($var_name, '', 1, '/');
 	}
@@ -43,7 +41,6 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 	require_once 'status.php';
 
 
-	
 	$config_path="/usr/local/share/bfgminer/bfgminer.conf";
 	$fh = fopen($config_path, "r");
 	$config_data = fread($fh, filesize($config_path));
@@ -61,15 +58,11 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 
 
 	$summary = request('{"command":"summary"}');
-
-
 ?>
 
 
-
-
 		<?php
-			if($GLOBALS['hashed_pass'] != null && (validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout'] ) || file_exists("/etc/PIckaxe/pickaxe_show_nl_status") ) )
+			if($GLOBALS['hashed_pass'] != null && (validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout'] ) || (read_ini_file('StatusWOLogin') == "enabled") ) ) 
 			{
 		?>
 
@@ -83,7 +76,6 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 				$status_html =  generateStatusHtml($summary, $devs);
 				echo "$status_html"
 			?>
-				
 		</div>
 
 		<?php
@@ -91,9 +83,7 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 		?>
 
 
-
 		<div id="controls" class="control_container">
-
 
 
 			<?php
@@ -102,7 +92,6 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 			?>
 			<form  action="set_password.php" id="main_form" method="post" accept-charset="utf-8">
 
-				
 				<div>
 					<span class="label_span">&nbsp;</span>
 					<span class="data_span" >This is your first visit. Set a login password</span>
@@ -110,7 +99,6 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 
 				<div class="spacer"></div>
 
-			
 				<div>
 					<span class="label_span">Password:</span>
 					<span class="input_span">
@@ -123,7 +111,6 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 						<input class='rounded_text' type='password' name='web_pass_2' />
 					</span>
 				</div>
-				
 				<div>
 					<span class="label_span">&nbsp;</span>
 					<span class="input_span">
@@ -139,7 +126,7 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 					if(isset($GLOBALS['login_message']) && isset($GLOBALS['login_message_class']))
 					{
 						echo "\t\t\t<div>\n";
-						echo "\t\t\t\t<span class=\"label_span\">&nbsp;</span>\n";					
+						echo "\t\t\t\t<span class=\"label_span\">&nbsp;</span>\n";
 						echo "\t\t\t\t<span class=\"" . $GLOBALS['login_message_class'] . "\" >\n";
 						echo "\t\t\t\t\t" . $GLOBALS['login_message'] . "\n";
 						echo "\t\t\t\t</span>\n";
@@ -150,14 +137,12 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 			<form  action="login.php" id="main_form" method="post" accept-charset="utf-8">
 
 				<div class="spacer"></div>
-			
 				<div>
 					<span class="label_span">Login:</span>
 					<span class="input_span">
 						<input class='rounded_text' type='password' name='login_pass' />
 					</span>
 				</div>
-				
 				<div>
 					<span class="label_span">&nbsp;</span>
 					<span class="input_span">
@@ -170,11 +155,10 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 				}
 				else
 				{
-					
 					if(isset($GLOBALS['control_message']) && isset($GLOBALS['control_message_class']))
 					{
 						echo "\t\t\t<div>\n";
-						echo "\t\t\t\t<span class=\"label_span\">&nbsp;</span>\n";					
+						echo "\t\t\t\t<span class=\"label_span\">&nbsp;</span>\n";
 						echo "\t\t\t\t<span class=\"" . $GLOBALS['control_message_class'] . "\" >\n";
 						echo "\t\t\t\t\t" . $GLOBALS['control_message'] . "\n";
 						echo "\t\t\t\t</span>\n";
@@ -184,10 +168,8 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 			?>
 
 
-
 			<form  action="update_settings.php" id="main_form" method="post" accept-charset="utf-8">
 
-				
 				<div class="spacer"></div>
 				<div>
 					<span class="label_span">Primary Pool URL:</span>
@@ -209,7 +191,6 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 				</div>
 
 				<div class="spacer"></div>
-				
 				<div>
 					<span class="label_span">Failover Pool URL:</span>
 					<span class="input_span">
@@ -230,13 +211,12 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 				</div>
 
 				<div class="spacer"></div>
-
 				<div>
 					<span class="label_span">Display Status Without Login:</span>
 					<span class="input_span">
 						<div class="check_3d">
 							<?php
-								$nl_status_checked = file_exists("/etc/PIckaxe/pickaxe_show_nl_status") ? "checked=\"yes\"" : ""; 
+								$nl_status_checked = (read_ini_file('StatusWOLogin') == "enabled") ? "checked=\"yes\"" : ""; 
 								echo "\t\t\t\t\t\t\t<input type=\"checkbox\"  id=\"nl_status\" $nl_status_checked name=\"nl_status\" />\n";
 							?>
 							<label for="nl_status"></label> 
@@ -249,7 +229,7 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 					<span class="input_span">
 						<div class="check_3d">
 							<?php
-								$use_tor_checked = file_exists("/etc/PIckaxe/pickaxe_use_tor") ? "checked=\"yes\"" : ""; 
+								$use_tor_checked = (read_ini_file('Tor') == "enabled") ? "checked=\"yes\"" : ""; 
 								echo "\t\t\t\t\t\t\t<input type=\"checkbox\"  id=\"use_tor\" $use_tor_checked name=\"use_tor\" />\n";
 							?>
 							<label for="use_tor"></label> 
@@ -385,7 +365,6 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 		{
 
 			if(document.getElementById("status") == null) { return ; }
-				
 			var now = (new Date).valueOf();	
 			if(doing_update && (now - update_time) < 10000) { return ; }
 			doing_update = true;
@@ -429,22 +408,17 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 
 
 
-		
 		document.getElementById("update").onclick = update;
 		if(document.getElementById("logout") != null)
 		{
 			document.getElementById("logout").onclick = logout;
 		}
 
-		
 		setInterval(updateStatus, 2000);
 		document.getElementById("wait").style.display = "none";
 		document.getElementById("wait_message").style.display = "none";
 
-
 	</script>
-
-
 
 	</body>
 </html>

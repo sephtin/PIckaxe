@@ -7,7 +7,7 @@
 	# therefore set content-type to text/plain
 	header('Content-Type: text/plain');
 
-	$validated = file_exists("/etc/PIckaxe/pickaxe_show_nl_status");
+	$validated = (read_ini_file('StatusWOLogin') == "enabled");
 	if(!$validated)
 	{
 		$validated = validPasswordCookie(true, null, $GLOBALS['session_timeout']);

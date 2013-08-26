@@ -21,7 +21,7 @@ else
 	$json_config = json_decode($config_data, true);
 
 
-	$need_bfgminer_restart = false;
+	$need_miner_restart = false;
 	$pool_variables = [ "primary_url", "primary_user", "primary_pass", "fallback_url", "fallback_user", "fallback_pass" ] ;
 	foreach($pool_variables as $pv) 
 	{
@@ -29,7 +29,7 @@ else
 		$pool_var = preg_replace('/^.*_/', '', $pv);
 		if($json_config["pools"][$pool_num][$pool_var] != $_POST[$pv])
 		{
-			$need_bfgminer_restart = true;
+			$need_miner_restart = true;
 			$json_config["pools"][$pool_num][$pool_var] = $_POST[$pv];
 		}
 	}
@@ -40,43 +40,32 @@ else
 	fclose($fh);
 
 
-	$nl_status_file="/etc/PIckaxe/pickaxe_show_nl_status";
-	$use_tor_file="/etc/PIckaxe/pickaxe_use_tor";
 	if(isset($_POST['nl_status']))
 	{
-		umask(0002);
-		touch("$nl_status_file");
-
+		write_ini_file('StatusWOLogin', "enabled");
 	}
 	else
 	{
-		unlink("$nl_status_file");
+		write_ini_file('StatusWOLogin', "disabled");
 	}
 
 
 	if(isset($_POST['use_tor']))
 	{
-		if(!file_exists($use_tor_file))
+		if(!read_ini_file('Tor') == "enabled")
 		{
-			$need_bfgminer_restart = true;
-			umask(0002);
-			touch("$use_tor_file");
-			system("sudo update-rc.d tor enable");
-			system("sudo /etc/init.d/tor restart ; sleep 10 ;");
-			system("sudo /usr/sbin/update-rc.d torify enable");
-			system("sudo /etc/init.d/torify restart");
+			write_ini_file('Tor', "enabled");
+			$need_miner_restart = true;
+			system("sudo /etc/PIckaxe/TOR.sh enable ; sleep 10 ;");
 		}
 	}
 	else
 	{
-		if(file_exists($use_tor_file))
+		if(!read_ini_file('Tor') == "enabled")
 		{
-			$need_bfgminer_restart = true;
-			unlink("$use_tor_file");
-			system("sudo /usr/sbin/update-rc.d tor disable");
-			system("sudo /etc/init.d/tor stop ");
-			system("sudo /usr/sbin/update-rc.d torify disable");
-			system("sudo /etc/init.d/torify stop");
+			$need_miner_restart = true;
+			write_ini_file('Tor', "disabled");
+			system("sudo /etc/PIckaxe/TOR.sh disable; sleep 10 ;");
 		}
 	}
 
@@ -92,7 +81,7 @@ else
 	setcookie( "control_message_class", "data_span_good", 0, "/");
 
 
-	if($need_bfgminer_restart)
+	if($need_miner_restart)
 	{
 		system("sudo /etc/init.d/bfgminer restart ");
 		sleep(10);

@@ -50,14 +50,14 @@ function getChipRowStr($chip, $is_single_chip_dev, $have_multiple_chip_devs, $ha
 	$hwerrors = $chip['Hardware Errors'];
 	$accepted = $chip['Accepted'];
 	$totalshares = $accepted+$rejected+$hwerrors;
-        if(isset($hwerrors) && isset($totalshares))
-        {
-                $pcthwerrors = round($hwerrors/$totalshares*100, 2);
-        }
-        if(isset($rejected) && isset($totalshares) )
-        {
-                $pctrejected = round($rejected/$totalshares*100, 2);
-        }
+	if(isset($hwerrors) && isset($totalshares))
+	{
+		$pcthwerrors = round($hwerrors/$totalshares*100, 2);
+	}
+	if(isset($rejected) && isset($totalshares) )
+	{
+		$pctrejected = round($rejected/$totalshares*100, 2);
+	}
 
 	$result = "";
 	$result = $result . "\t\t\t\t\t\t<tr class='devtr'>\n";
@@ -76,16 +76,16 @@ function getChipRowStr($chip, $is_single_chip_dev, $have_multiple_chip_devs, $ha
 	$result = $result . "\t\t\t\t\t\t\t<td>$last_difficulty</td>\n";
 	$result = $result . "\t\t\t\t\t\t\t<td>$totalshares</td>\n";
 #	$result = $result . "\t\t\t\t\t\t\t<td>$accepted</td>\n";
-        if (isset($pctrejected) && isset($pcthwerrors)) 
-        {
-                $result = $result . "\t\t\t\t\t\t\t<td>$rejected ($pctrejected)</td>\n";
-                $result = $result . "\t\t\t\t\t\t\t<td>$hwerrors ($pcthwerrors)</td>\n";
-        } 
-        else 
-        {
-                $result = $result . "\t\t\t\t\t\t\t<td>$rejected</td>\n";
-                $result = $result . "\t\t\t\t\t\t\t<td>$hwerrors</td>\n";
-        }
+	if (isset($pctrejected) && isset($pcthwerrors)) 
+	{
+		$result = $result . "\t\t\t\t\t\t\t<td>$rejected ($pctrejected)</td>\n";
+		$result = $result . "\t\t\t\t\t\t\t<td>$hwerrors ($pcthwerrors)</td>\n";
+	} 
+	else 
+	{
+		$result = $result . "\t\t\t\t\t\t\t<td>$rejected</td>\n";
+		$result = $result . "\t\t\t\t\t\t\t<td>$hwerrors</td>\n";
+	}
 
 	if($have_device_with_temp)
 	{
@@ -107,7 +107,7 @@ function isHashing($summary)
 		}
 	}
 	return $is_hashing;
-}	
+}
 function generateStatusHtml($summary, $devs)
 {
 	if($summary != null)
@@ -167,7 +167,7 @@ function generateStatusHtml($summary, $devs)
 			$num_mining_devices = "0";
 		}
 	}
-	
+
 	$status = "";
 	$status_class = "";
 	if( $summary != null && floatval($mhs_av) > 0)
@@ -237,7 +237,6 @@ function generateStatusHtml($summary, $devs)
 		$status_html = $status_html . "\t\t\t\t\t<span class=\"label_span\">Device Details:</span>\n";
 		$status_html = $status_html . "\t\t\t\t\t<span class=\"data_span\" >&nbsp;</span>\n";
 		$status_html = $status_html . "\t\t\t\t</div>\n";
-		
 		$status_html = $status_html . "\t\t\t\t<div class='devtable'>\n";
 		$status_html = $status_html . "\t\t\t\t\t<table>\n";
 		$status_html = $status_html . "\t\t\t\t\t\t<tr class='devtrh'>\n";
@@ -256,7 +255,6 @@ function generateStatusHtml($summary, $devs)
 #		$status_html = $status_html . "\t\t\t\t\t\t\t<td class='devth'>Accepted</td>\n";
 		$status_html = $status_html . "\t\t\t\t\t\t\t<td class='devth'>Rejected (%)</td>\n";
 		$status_html = $status_html . "\t\t\t\t\t\t\t<td class='devth'>HWErrors (%)</td>\n";
-
 		if($have_device_with_temp)
 		{
 			$status_html = $status_html . "\t\t\t\t\t\t\t<td class='devth'>Temperature</td>\n";
@@ -272,11 +270,7 @@ function generateStatusHtml($summary, $devs)
 		}
 		$status_html = $status_html . "\t\t\t\t\t</table>\n";
 		$status_html = $status_html . "\t\t\t\t</div>\n";
-#####For learning:
-##print_r(array_keys($chip));
-
 	}
-
 	return $status_html;
 }
 
