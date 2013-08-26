@@ -1,0 +1,26 @@
+Version 0.2.0 - 20130826 (sephtin) 
+--From NoMoreSuders branch
+--Moved all config files into one config file 
+--Removed global sudo access from www-data, gave it only 2 files it can sudo
+--Prep work for         
+
+Version 0.1.1 - 20130818 (sephtin)
+--From Pickaxe-sephtin-0.1.x branch
+--Hosts in setup.sh fixes
+--Added TotalShares, Rejected (and %), HardwareErrors (and %)
+
+Version -- Original Commit (stronginthearm)
+
+
+
+
+--- PIckaxe - By stronginthearm ---
+
+###Developer Info:
+stronginthearm
+Donate:  1M9GY1qNKf6Fo1HRUyFxnyH5MuztMbPBg3
+Repo:  https://github.com/stronginthearm/PIckaxe
+
+sephtin
+Donate:  17ugcvKLG1rR7qb1yh6yzEsSyFEFPwvWcF
+Repo:  https://github.com/sephtin/PIckaxe
