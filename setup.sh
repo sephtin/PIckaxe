@@ -5,9 +5,8 @@
 
 this_script="$(readlink -f "$0")"
 this_dir="${this_script%/${0##*/}}"
-settings_dir="/etc/PIckaxe"
 
-required_packages="vim git ssh sudo coreutils libssl-dev openssl build-essential uthash-dev libjansson-dev autoconf pkg-config libtool libcurl4-openssl-dev libncurses5-dev nginx php5-cli php5-fpm tor"
+required_packages="vim git ssh sudo coreutils libssl-dev openssl build-essential uthash-dev libjansson-dev autoconf pkg-config libtool libcurl4-openssl-dev libncurses5-dev nginx php5-cli php5-fpm tor libudev-dev libusb-dev"
 
 # prefer bfgminer from Luke Jr. to cgminer, better optimized for BFL devices, 
 # checkout code directly from github at url below
@@ -210,10 +209,25 @@ cp -r "$this_dir/pickaxe_webif/"* /var/www
 /etc/init.d/nginx restart
 
 
-# allow www-data unlimited sudo without password
-#echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: ALL' >>/etc/sudoers
 # Restricted sudo to only called binaries
-echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: /etc/init.d/bfgminer *, /etc/init.d/tor *, /etc/init.d/torify *, /usr/sbin/update-rc.d *' >>/etc/sudoers
+echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: /etc/init.d/bfgminer *, /etc/PIckaxe/TOR.sh' >>/etc/sudoers
+
+
+#Generate PIckaxe Config file and dir:
+mkdir -p /etc/PIckaxe
+chgrp www-data /etc/PIckaxe
+chmod 775 /etc/PIckaxe
+if [ ! -f /etc/PIckaxe/PIckaxeConfig.ini ]
+then
+cat << 'EOF' >/etc/PIckaxe/PIckaxeConfig.ini
+StatusWOLogin="enabled"
+Password_hash=
+
+EOF
+fi
+touch "/etc/PIckaxe/PIckaxeConfig.ini"
+chmod 664 "/etc/PIckaxe/PIckaxeConfig.ini"
+chgrp www-data "/etc/PIckaxe/PIckaxeConfig.ini"
 
 
 # tor, disable by default
@@ -227,11 +241,25 @@ cd iptables_torify
 /usr/sbin/update-rc.d tor  disable
 /usr/sbin/update-rc.d torify disable 
 
-# by default display settings without login
-# Gave group r/w, and changed group to www-data.
-mkdir -p /etc/PIckaxe
-chgrp www-data /etc/PIckaxe
-chmod 775 /etc/PIckaxe
-touch "/etc/PIckaxe/pickaxe_show_nl_status"
-chmod 664 "/etc/PIckaxe/pickaxe_show_nl_status"
-chgrp www-data "/etc/PIckaxe/pickaxe_show_nl_status"
+#setup tor script
+cat << 'EOF' >/etc/PIckaxe/TOR.sh
+#!/bin/bash
+#
+if [ $1 == "enable" ]
+then
+	update-rc.d tor enable
+	/etc/init.d/tor restart
+	sleep 10
+	/usr/sbin/update-rc.d torify enable
+	/etc/init.d/torify restart
+else
+	/etc/init.d/tor stop
+	update-rc.d tor disable
+	sleep 10
+	/etc/init.d/torify stop
+	/etc/init.d/torify disable
+fi
+EOF
+chmod 774 /etc/PIckaxe/TOR.sh
+chgrp www-data /etc/PIckaxe/TOR.sh
+
