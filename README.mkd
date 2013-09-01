@@ -12,13 +12,12 @@ Feature overview:
 * Automatically restarts mining on boot if pool credentials are set
 * Option to connect to mining pool(s) via Tor
 * Script to install from default Raspbian Wheezy image provided
-* Disk image available that fits on 2GB SD card and 266MB zipped download size
-* Disk image will automatically regenerate SSH keys on first boot so they are unique
+* Setup will automatically regenerate SSH keys on first boot so they are unique
 * No default donation options
 * Tested on Block Erupters (Icarus) and BFL hardware
 * Open Source under GPLv2
-* Uses bfgminer 3.1.4 for mining
-* Based on Raspbian Wheezy July 26th 2013 release
+* Uses bfgminer for mining
+* Based on Raspbian Wheezy
 
 ### Installation
 
@@ -26,44 +25,100 @@ There are two ways to install PIckaxe. Option one is to write the PIckaxe image 
 
 ##### Installing The Disk Image
 
-I've removed this section.  If you'd like to install from image, please see the original author's repo for more info.  
+If you'd like to install from image, please see the original author's repo for more info:  https://github.com/stronginthearm/PIckaxe  
+Once default PIckaxe is installed, follow the upgrade steps below if you're interested in my modifications.  
 
-For my changes please install Raspbian, pull the source, and run setup as described below.  There are all kinds of guides describing how to install Raspbian.  If you received an SDCard with your Pi, you probably already have it installed!
+My suggestion would be to instead install the latest version fo Raspbian, and then run setup as described below.  
 
-##### Installing Using The setup.sh Script
+##### Clean Install Using The setup.sh Script
 
-SSH into your raspberry pi as a user that has sudo priviledges (By default the pi user has these priviledges). 
-Copy the entire contents of the pickaxe repository to your raspberry pi which has raspbian wheezy installed.  
+Download the latest Raspbian "wheezy" image from http://www.raspberrypi.org/downloads  
+Install the Raspbian "wheezy" image to your SDCard...  
+Instrucitons for installing to SDCard for windows can be found here:  http://elinux.org/RPi_Easy_SD_Card_Setup#Using_the_Win32DiskImager_program  
+For linux, the command to install to the SDCard looks something like:  
 
-		git clone https://github.com/sephtin/PIckaxe
+		dd bs=1M if=[DATE/VERSION_OF_RASPBIAN]-wheezy-raspbian.zip of=/dev/[YOUR_SDCARD_DRIVE]  
 
-Change into the PIckaxe directory and run setup:
+Once the SDCard is loaded, put it in the rPi, and boot.  
+SSH into your raspberry pi as a user that has sudo priviledges (By default the pi user has these priviledges).  
 
-		cd PIckaxe
-		sudo ./setup.sh
+> -Optional:  Expand the image to use the full contents of the SDCard and/or change the time-zone:  
 
-This script will take half an hour to an hour to run depending on the speed of your network connection. Once the script is finished you should be able to connect to the PIckaxe web interface. Note that this script automatically regenerates your raspberry pi SSH keys as this is a step that should always be done after a fresh installation of Raspbian to ensure your security. The hostname is also changed to PIckaxe.
+		raspi-config  
+		
+> To change the time-zone, chose the Internationalization options, then select your time zone.  
+> To Expand the image to use your entire SDcard choose to Expand FileSystem.  
+> It may ask you to reboot when complete.  SSH back into your rPi again after the reboot.  
+  
+  
+
+Pull down the pickaxe repository to your raspberry pi which has raspbian wheezy installed.  
+Either:  
+A) To get my latest stable changes:  
+
+		cd && git clone https://github.com/sephtin/PIckaxe  
+		
+-OR-  
+B) To get the most updated changes (warning, might not always be steable if I'm making changes or testing something new):  
+
+		cd && git clone https://github.com/sephtin/PIckaxe -b Testing  
+
+Then run setup:  
+
+		cd PIckaxe && sudo ./setup.sh  
+		
+This will take a while. When it completes, log into the web interface to configure your miner.  
 
 
-### Screenshots And Usage Instructions
+##### Upgrading  
 
-Configuration of the web interface should be intuitive and straightforward. Instead of describing how to configure the web interface here, please see the series of configuration screenshots I have [uploaded to Imgur](http://imgur.com/a/B9FyJ). These show the progression of configuring and using PIckaxe. These same screenshots are included in the screenshots directory of this repository.
+SSH into your raspberry pi as a user that has sudo priviledges (By default the pi user has these priviledges).  
+> -Optional:  Expand the image to use the full contents of the SDCard and/or change the time-zone (if you haven't done so already)  
 
-NOTE:  Screenshots are of the original author's version, and do not contain my updates.  -sephtin
+		raspi-config  
+		
+> To change the time-zone, chose the Internationalization options, then select your time zone.  
+> To Expand the image to use your entire SDcard choose to Expand FileSystem.  
+> It may ask you to reboot when complete.  SSH back into your rPi again after the reboot.  
 
-### DISCLAIMER
+Pull down the pickaxe repository to your raspberry pi so we can begin the upgrade.  
+Either:  
+A) To get my latest (usually well tested) stable changes:  
 
-I cannot guarantee that this software is bug free or that you should be trusting your expensive mining hardware to it. Use at your own risk. The most I can say is that I trust it enough to use with my own expensive mining hardware. Note the screenshot and photograph of two BFL Little Singles which as of today (August 11 2013) are quite valuable. On the other hand I'm sure that hardware will be about as effective as CPU mining is today in about a year given current trends ;-)
+		cd && rm -rf PIckaxe && git clone https://github.com/sephtin/PIckaxe  
+		
+-OR-  
+B) To get the most updated changes (warning, might not always be steable if I'm making changes or testing something new):  
+
+		cd && rm -rf PIckaxe && git clone https://github.com/sephtin/PIckaxe -b Testing  
+
+Change into the PIckaxe directory and run setup:  
+
+		cd PIckaxe && sudo ./setup.sh  
+
+This will take a while. When it completes, log into the web interface to configure your miner. Note that this script automatically regenerates your raspberry pi SSH keys the first time it is run for your security. The hostname is changed to PIckaxe.  
 
 
-### Donations Are Welcome
+### Screenshots And Usage Instructions  
 
-To donate to the original author (stronginthearm) send donations to: 1M9GY1qNKf6Fo1HRUyFxnyH5MuztMbPBg3
+Configuration of the web interface should be intuitive and straightforward. Instead of describing how to configure the web interface here, please see the series of configuration screenshots I have [uploaded to Imgur](http://imgur.com/a/B9FyJ). These show the progression of configuring and using PIckaxe. These same screenshots are included in the screenshots directory of this repository.  
+NOTE:  Screenshots are of the original author's version, and do not contain my updates.  -sephtin  
 
-Please note that the original author is stronginthearm.  Please see VERSIONS for changes I've made on this repo from his. (I've asked him to merge some of my changes... but don't know how to contact the original author! :(  
-If you are the original author, or know him, please PM me on bitcointalk.
 
-If my work has helped you, donations are appreciated!  17ugcvKLG1rR7qb1yh6yzEsSyFEFPwvWcF
+### DISCLAIMER  
+
+I cannot guarantee that this software is bug free or that you should be trusting your expensive mining hardware to it. Use at your own risk. The most I can say is that I trust it enough to use with my own expensive mining hardware. Note the screenshot and photograph of two BFL Little Singles which as of today (August 11 2013) are quite valuable. On the other hand I'm sure that hardware will be about as effective as CPU mining is today in about a year given current trends ;-)  
+
+
+### Donations Are Welcome  
+
+If my work has helped you, please consider donating!  17ugcvKLG1rR7qb1yh6yzEsSyFEFPwvWcF  
+
+
+Please note that the original author is stronginthearm.  Please see the VERSION file for changes I've made on this repo from his. (I've asked him to merge some of my changes... but don't know how to contact the original author! :(  
+To donate to the original author (stronginthearm) send donations to: 1M9GY1qNKf6Fo1HRUyFxnyH5MuztMbPBg3  
+If you are the original author, or know him, please PM me on bitcointalk.  
+
 
 Thank you!  
--sephtin
+-sephtin  
