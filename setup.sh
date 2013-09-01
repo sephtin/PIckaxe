@@ -11,13 +11,16 @@ required_packages="vim git ssh sudo coreutils libssl-dev openssl build-essential
 # prefer bfgminer from Luke Jr. to cgminer, better optimized for BFL devices, 
 # checkout code directly from github at url below
 bfgminer_url="git://github.com/luke-jr/bfgminer.git"
-bfgminer_tag="bfgminer-3.1.4"
+bfgminer_tag="bfgminer-3.2.0"
 bfgminer_build_dir="/tmp/bfgminer-build"
 
-#regenerate ssh keys
-rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
+#regenerate ssh keys if this is a new install
+if [ ! -f /etc/PIckaxe/PIckaxeConfig.ini ]
+then
+	rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
+fi
 
-#boilerplate debian system upgrade
+#Raspbian system upgrade
 export DEBIAN_FRONTEND="noninteractive"
 apt-get update -y
 apt-get dist-upgrade -y
@@ -36,8 +39,11 @@ echo "PIckaxe" > /etc/hostname
 echo "PIckaxe" > /proc/sys/kernel/hostname   2>/dev/null
 sed -i "s/\(127.0.1.1\s\)raspberrypi/\1PIckaxe/g" /etc/hosts
 
+#Stop miner before install/upgrade (just in case)
+/etc/init.d/bfgminer stop >/dev/null 2>&1
 
 #install bfgminer to /usr/local/bin/bfgminer
+#Upgrade will replace BFG every time.
 mkdir -p  "$bfgminer_build_dir"
 rm    -rf "$bfgminer_build_dir"
 git clone "$bfgminer_url" "$bfgminer_build_dir"
@@ -47,13 +53,15 @@ sh autogen.sh
 ./configure --disable-opencl
 make
 make install
-cp /usr/local/lib/libblkmak*so* /usr/lib
+cp -f /usr/local/lib/libblkmak*so* /usr/lib
 cd /tmp
 rm -rf "$bfgminer_build_dir"
 
 # bfgminer config
 # set icarus options for block eruptors so no further config is necessary
 # also, set a fairly long queue (12), so we can handle larger numbers of devices
+if [ ! -f /usr/local/share/bfgminer/bfgminer.conf ]
+then
 cat << 'EOF' >/usr/local/share/bfgminer/bfgminer.conf
 {
 	"pools": [
@@ -88,10 +96,12 @@ cat << 'EOF' >/usr/local/share/bfgminer/bfgminer.conf
 }
 EOF
 chown www-data:www-data /usr/local/share/bfgminer/bfgminer.conf
-
+fi
 
 
 #bfgminer init
+if [ ! -f /etc/init.d/bfgminer ]
+then
 cat << 'EOF' >/etc/init.d/bfgminer
 #!/bin/bash
 
@@ -117,7 +127,7 @@ do_start()
 		echo "ERROR: config file '$CONFIG' does not exist"
 		exit 1;
 	fi
-	
+
 	start-stop-daemon --status --exec "$BIN" 
 	if [ "$?" = "0" ] ; then
 		echo "ERROR: $NAME is already running"
@@ -169,17 +179,18 @@ esac
 
 exit 0
 
-
-
 EOF
 chmod 755 /etc/init.d/bfgminer
 update-rc.d bfgminer defaults
 update-rc.d bfgminer enable
+fi
 
 #detect devices  if any and start bfgminer. Will stop if no devices present
 /etc/init.d/bfgminer start >/dev/null 2>&1
 
 #setup nginx
+if [ ! -f /etc/PIckaxe/PIckaxeConfig.ini ]
+then
 cat << 'EOF' >/etc/nginx/sites-available/default
 server {
 	listen   80; ## listen for ipv4; this line is default and implied
@@ -200,16 +211,19 @@ server {
 	}
 }
 EOF
+fi
 
+#Stop web services, upgrade PIckaxe WebIF, and restart.
+/etc/init.d/php5-fpm stop
+/etc/init.d/nginx stop
 mkdir -p /var/www
-cp -r "$this_dir/pickaxe_webif/"* /var/www
-
-
+cp -rf "$this_dir/pickaxe_webif/"* /var/www
 /etc/init.d/php5-fpm restart
 /etc/init.d/nginx restart
 
 
-# Restricted sudo to only called binaries
+# Give the WebIF access to start/stop miner and TOR
+sed -i "/www-data/d" /etc/sudoers
 echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: /etc/init.d/bfgminer *, /etc/PIckaxe/TOR.sh' >>/etc/sudoers
 
 
@@ -224,12 +238,19 @@ StatusWOLogin="enabled"
 Password_hash=
 
 EOF
-fi
-touch "/etc/PIckaxe/PIckaxeConfig.ini"
 chmod 664 "/etc/PIckaxe/PIckaxeConfig.ini"
 chgrp www-data "/etc/PIckaxe/PIckaxeConfig.ini"
+fi
 
+if [ -f /etc/pickaxe_hashed_pass ]
+then
+pass=$(</etc/pickaxe_hashed_pass)
+sed -i "s/\(Password_hash\s*=\s*\).*$/\1$\"pass\"/g" /etc/PIckaxe\PIckaxeConfig.ini
+rm -f /etc/pickaxe_hashed_pass
+fi
 
+if [ ! -f /etc/init.d/tor ]
+then
 # tor, disable by default
 # tor iptables rules by Eric Bishop, code at https://github.com/ericpaulbishop/iptables_torify
 cd /tmp
@@ -240,7 +261,10 @@ cd iptables_torify
 /etc/init.d/tor stop
 /usr/sbin/update-rc.d tor  disable
 /usr/sbin/update-rc.d torify disable 
+fi
 
+if [ ! -f /etc/PIckaxe/TOR.sh ]
+then
 #setup tor script
 cat << 'EOF' >/etc/PIckaxe/TOR.sh
 #!/bin/bash
@@ -262,4 +286,4 @@ fi
 EOF
 chmod 774 /etc/PIckaxe/TOR.sh
 chgrp www-data /etc/PIckaxe/TOR.sh
-
+fi
