@@ -28,11 +28,6 @@ apt-get autoremove
 
 #install required packages
 apt-get install -y aptitude $required_packages
-#for p in $required_packages ; do
-#	echo "installing $p"
-#	aptitude install -y "$p"
-#done
-
 
 #set hostname to PIckaxe
 echo "PIckaxe" > /etc/hostname
