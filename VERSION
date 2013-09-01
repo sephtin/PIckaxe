@@ -2,6 +2,7 @@ Testing - (sephtin)
 --Currently Testing branch
 --modified setup.sh to be able to upgrade in place.
 --Changed BFGMiner version used to 3.2.0
+--Moved BFGMiner config file to PIckaxe settings directory
 --()Add cgminer
 --()Remove rc.d startup script for bfgminer
 --()Create startup script that reads correct miner from config file, based on Kano's startup scripts

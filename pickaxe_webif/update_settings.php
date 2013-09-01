@@ -13,7 +13,7 @@ if(!validPasswordCookie(true, null, $GLOBALS['session_timeout']))
 else
 {
 
-	$config_path="/usr/local/share/bfgminer/bfgminer.conf";
+	$config_path="/etc/PIckaxe/bfgminer.conf";
 
 	$fh = fopen($config_path, "r");
 	$config_data = fread($fh, filesize($config_path));

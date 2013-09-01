@@ -41,7 +41,7 @@ if(validPasswordCookie(false, $GLOBALS['hashed_pass'], $GLOBALS['session_timeout
 	require_once 'status.php';
 
 
-	$config_path="/usr/local/share/bfgminer/bfgminer.conf";
+	$config_path="/etc/PIckaxe/bfgminer.conf";
 	$fh = fopen($config_path, "r");
 	$config_data = fread($fh, filesize($config_path));
 	fclose($fh);

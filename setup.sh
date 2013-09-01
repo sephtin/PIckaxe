@@ -60,9 +60,9 @@ rm -rf "$bfgminer_build_dir"
 # bfgminer config
 # set icarus options for block eruptors so no further config is necessary
 # also, set a fairly long queue (12), so we can handle larger numbers of devices
-if [ ! -f /usr/local/share/bfgminer/bfgminer.conf ]
+if [ ! -f /etc/PIckaxe/bfgminer.conf ]
 then
-cat << 'EOF' >/usr/local/share/bfgminer/bfgminer.conf
+cat << 'EOF' >/etc/PIckaxe/bfgminer.conf
 {
 	"pools": [
 		{
@@ -95,13 +95,11 @@ cat << 'EOF' >/usr/local/share/bfgminer/bfgminer.conf
 	"donation"      : "0.00"
 }
 EOF
-chown www-data:www-data /usr/local/share/bfgminer/bfgminer.conf
+chown www-data:www-data /etc/PIckaxe/bfgminer.conf
 fi
 
 
 #bfgminer init
-if [ ! -f /etc/init.d/bfgminer ]
-then
 cat << 'EOF' >/etc/init.d/bfgminer
 #!/bin/bash
 
@@ -118,7 +116,8 @@ cat << 'EOF' >/etc/init.d/bfgminer
 
 NAME="bfgminer"
 BIN="/usr/local/bin/$NAME"
-CONFIG="/usr/local/share/bfgminer/$NAME.conf"
+#CONFIG="/usr/local/share/bfgminer/$NAME.conf"
+CONFIG="/etc/PIckaxe/$NAME.conf"
 DEVICE_LIST_FILE="/usr/local/share/bfgminer/BFG_DEVICES"
 
 do_start()
@@ -183,14 +182,11 @@ EOF
 chmod 755 /etc/init.d/bfgminer
 update-rc.d bfgminer defaults
 update-rc.d bfgminer enable
-fi
 
 #detect devices  if any and start bfgminer. Will stop if no devices present
-/etc/init.d/bfgminer start >/dev/null 2>&1
+/etc/init.d/bfgminer restart >/dev/null 2>&1
 
 #setup nginx
-if [ ! -f /etc/PIckaxe/PIckaxeConfig.ini ]
-then
 cat << 'EOF' >/etc/nginx/sites-available/default
 server {
 	listen   80; ## listen for ipv4; this line is default and implied
@@ -211,21 +207,16 @@ server {
 	}
 }
 EOF
-fi
 
-#Stop web services, upgrade PIckaxe WebIF, and restart.
-/etc/init.d/php5-fpm stop
-/etc/init.d/nginx stop
+#Install/upgrade PIckaxe WebIF, and restart.
 mkdir -p /var/www
 cp -rf "$this_dir/pickaxe_webif/"* /var/www
 /etc/init.d/php5-fpm restart
 /etc/init.d/nginx restart
 
-
 # Give the WebIF access to start/stop miner and TOR
 sed -i "/www-data/d" /etc/sudoers
 echo '%www-data ALL=(ALL:ALL) NOPASSWD: NOPASSWD: /etc/init.d/bfgminer *, /etc/PIckaxe/TOR.sh' >>/etc/sudoers
-
 
 #Generate PIckaxe Config file and dir:
 mkdir -p /etc/PIckaxe
